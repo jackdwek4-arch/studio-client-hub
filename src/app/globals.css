@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #16181d;
+  --color-ink-2: #4b5160;
+  --color-ink-3: #8a90a0;
+  --color-paper: #f7f6f2;
+  --color-surface: #ffffff;
+  --color-line: #e6e4dd;
+  --color-accent: #0f6b5c;
+  --color-accent-2: #e3f1ed;
+  --color-warn: #b45309;
+  --color-warn-2: #fdf1e2;
+  --color-danger: #b91c1c;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+html { color-scheme: light; }
+body { @apply bg-paper text-ink antialiased; }
+
+.prose-doc h2 { @apply text-lg font-semibold mt-6 mb-2; }
+.prose-doc h3 { @apply text-base font-semibold mt-5 mb-1; }
+.prose-doc p  { @apply my-2 leading-relaxed; }
+.prose-doc ul { @apply list-disc pl-5 my-2 space-y-1; }
+.prose-doc strong { @apply font-semibold; }
