@@ -13,10 +13,16 @@ Delete this file once the app is live and tested.
 - Vercel project `studio-client-hub` on team `100xweb`, production URL
   `https://studio-client-hub.vercel.app`. Auto-deploys from `main`.
 
+- Vercel env vars added (all environments): NEXT_PUBLIC_SUPABASE_URL,
+  NEXT_PUBLIC_SUPABASE_ANON_KEY, NEXT_PUBLIC_APP_URL. Production redeployed.
+  The Vercel connector works for this project WITHOUT re-authorising to team
+  100xweb: call tools with the project id `prj_UfCNAPBGqPlQHajE7TxLW7M7Jj3m`
+  and no `slug`/`teamId` (passing the team scope returns 403).
+
 ## Not done (in order)
-1. Vercel env vars (none added yet): NEXT_PUBLIC_SUPABASE_URL,
-   NEXT_PUBLIC_SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY, STRIPE_SECRET_KEY,
-   NEXT_PUBLIC_APP_URL=https://studio-client-hub.vercel.app, STRIPE_WEBHOOK_SECRET.
+1. Vercel env vars still missing: SUPABASE_SERVICE_ROLE_KEY, STRIPE_SECRET_KEY,
+   STRIPE_WEBHOOK_SECRET. Owner pasted placeholders instead of the real
+   sb_secret_ / sk_test_ / sbp_ values; ask again.
 2. Stripe webhook: endpoint `https://studio-client-hub.vercel.app/api/stripe/webhook`,
    event `checkout.session.completed`. Copy its signing secret into Vercel as
    STRIPE_WEBHOOK_SECRET.
@@ -24,11 +30,12 @@ Delete this file once the app is live and tested.
 4. Redeploy on Vercel, then create the owner account at /login and test
    proposal -> contract -> invoice via the client portal link.
 
-## How the previous session was blocked
-- Network policy blocked api.stripe.com, api.supabase.com, *.supabase.co, *.vercel.app.
-  The owner was asked to allow these in the environment's Network access settings.
-- The Vercel connector was authorised to a personal account, not team 100xweb.
-  The owner was asked to reconnect it choosing team 100xweb.
+## How previous sessions were blocked
+- Network policy still blocks api.stripe.com, api.supabase.com, *.supabase.co,
+  *.vercel.app (checked again 2026-10-05). The owner must allow these in the
+  environment's Network access settings before the Stripe webhook and the
+  Supabase auth change can be done from a session.
+- Vercel connector: no longer a blocker, see Done.
 - The owner was asked to create a Supabase personal access token (sbp_...) so
   email confirmation can be switched off through the Management API.
 
