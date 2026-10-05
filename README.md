@@ -22,7 +22,7 @@ A small, self-hosted alternative to HoneyBook for a web design business: clients
 1. Go to [supabase.com](https://supabase.com) → **New project** (free tier). Pick a strong database password and save it.
 2. Open **SQL Editor** → **New query**, paste the contents of `supabase/migrations/0001_init.sql`, click **Run**.
 3. Go to **Authentication → Providers → Email** and turn **Confirm email** off (simplest), or leave it on and make sure **Authentication → URL Configuration → Site URL** is set to your app's URL in step 4.
-4. Go to **Project Settings → API** and copy: **Project URL**, **anon public** key, and **service_role** key.
+4. Go to **Project Settings → API Keys** and copy the **Publishable key** (`sb_publishable_…`) and the **Secret key** (`sb_secret_…`, click the eye icon to reveal it). Your **Project URL** is under **Project Settings → General** or **Data API**. Older projects show these as **anon** and **service_role** keys instead; those work too.
 
 ### 2. Set up payments (Stripe)
 1. Go to [dashboard.stripe.com](https://dashboard.stripe.com) → **Developers → API keys** → copy the **Secret key** (`sk_test_…` for testing, `sk_live_…` for real money).
@@ -38,8 +38,8 @@ Create a new repository on [github.com](https://github.com) and upload this fold
 | Variable | Where it comes from |
 |---|---|
 | `NEXT_PUBLIC_SUPABASE_URL` | Supabase → Project Settings → API → Project URL |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase → Project Settings → API → anon public |
-| `SUPABASE_SERVICE_ROLE_KEY` | Supabase → Project Settings → API → service_role (keep secret) |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase → Project Settings → API Keys → Publishable key |
+| `SUPABASE_SERVICE_ROLE_KEY` | Supabase → Project Settings → API Keys → Secret key (keep secret) |
 | `STRIPE_SECRET_KEY` | Stripe → Developers → API keys → Secret key |
 | `STRIPE_WEBHOOK_SECRET` | Stripe → Developers → Webhooks (step 5) — add after first deploy |
 | `NEXT_PUBLIC_APP_URL` | Your site URL, e.g. `https://yourproject.vercel.app` (no trailing slash) |
