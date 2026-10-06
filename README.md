@@ -43,6 +43,7 @@ Create a new repository on [github.com](https://github.com) and upload this fold
 | `STRIPE_SECRET_KEY` | Stripe → Developers → API keys → Secret key |
 | `STRIPE_WEBHOOK_SECRET` | Stripe → Developers → Webhooks (step 5) — add after first deploy |
 | `NEXT_PUBLIC_APP_URL` | Your site URL, e.g. `https://yourproject.vercel.app` (no trailing slash) |
+| `INQUIRY_WEBHOOK_SECRET` | Only if you connect a WordPress / Elementor form (see below). Any long random string |
 
 3. Click **Deploy**. You'll get a URL like `https://yourproject.vercel.app`.
 4. To use your own domain: **Settings → Domains**, add it, and create the DNS record Vercel shows you.
@@ -54,6 +55,18 @@ Create a new repository on [github.com](https://github.com) and upload this fold
 4. Copy the **Signing secret** (`whsec_…`) into Vercel as `STRIPE_WEBHOOK_SECRET` and redeploy (Deployments → ⋯ → Redeploy).
 
 That's it. Open your site, click **Create account**, then go to **Settings** to set your business name and booking-form slug.
+
+## Connect a WordPress (Elementor) form
+
+If your marketing site runs WordPress with Elementor Pro, its contact form can post leads straight into **Inquiries**:
+
+1. Run `supabase/migrations/0002_inquiry_source.sql` in the Supabase SQL editor (adds the `source` column).
+2. Add `INQUIRY_WEBHOOK_SECRET` to Vercel (any long random string, e.g. `openssl rand -hex 32`) and redeploy.
+3. In Elementor, edit the form. Set each field's **Advanced → ID** to `name`, `email`, `company`, `website`, `budget`, `message` (only `name` and `email` are required; skip the ones you don't have).
+4. Under **Actions After Submit** add **Webhook** and paste:
+   `https://YOUR-SITE/api/inquiries?slug=YOUR-SLUG&secret=YOUR-SECRET`
+   Both the default payload and "Advanced Data" work.
+5. Submit a test entry. It appears under Inquiries with a **website** badge and converts to a project like any other lead.
 
 ## Day-to-day flow
 
@@ -82,6 +95,7 @@ src/app/(app)/actions.ts   all owner-side server actions
 src/app/p/[token]/    client portal (secret link, no login)
 src/app/book/[slug]/  public inquiry form
 src/app/api/stripe/webhook/route.ts
+src/app/api/inquiries/route.ts   website-lead webhook (Elementor etc.), guarded by INQUIRY_WEBHOOK_SECRET
 src/lib/supabase/     server / browser / admin (service-role) clients + middleware
 src/lib/templates.ts  default proposal + contract text — edit to taste
 supabase/migrations/  database schema + row-level security

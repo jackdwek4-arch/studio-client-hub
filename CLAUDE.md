@@ -4,12 +4,12 @@ Studio Client Hub: a HoneyBook-style client management app for a web design busi
 
 ## Stack
 - Next.js 15 App Router, TypeScript, Tailwind v4 (`@theme` tokens in `src/app/globals.css`)
-- Supabase: Postgres + email/password auth. Schema and RLS in `supabase/migrations/0001_init.sql`
+- Supabase: Postgres + email/password auth. Schema and RLS in `supabase/migrations/` (one file per change)
 - Stripe Checkout for invoice payment; webhook at `src/app/api/stripe/webhook/route.ts`
 - Deployed on Vercel. Env vars listed in `.env.example` and README.
 
 ## Conventions
-- **Server Components + Server Actions only.** No API routes except the Stripe webhook and auth callback/signout. Forms post to actions in `src/app/(app)/actions.ts` (owner) or `src/app/p/[token]/actions.ts` (portal).
+- **Server Components + Server Actions only.** No API routes except the Stripe webhook, the website-lead webhook (`/api/inquiries`, secret-checked, used by the 100xweb WordPress site) and auth callback/signout. Forms post to actions in `src/app/(app)/actions.ts` (owner) or `src/app/p/[token]/actions.ts` (portal).
 - **Three Supabase clients** in `src/lib/supabase/`: `server.ts` (owner session, RLS applies), `client.ts` (browser, rarely needed), `admin.ts` (service role — only in portal/booking/webhook after validating token/slug/signature).
 - **Money is integer cents** (`*_cents`). Use `money()` from `src/lib/format.ts` to display and `toCents()` to parse form input.
 - **Dates:** `params` and `searchParams` are Promises (Next 15) — always `await` them.
@@ -23,7 +23,7 @@ profiles (1 per owner, auto-created on signup) · clients · projects (has `port
 ## Routes
 - `/login`, `/dashboard`, `/clients`, `/clients/[id]`, `/clients/new`, `/projects/[id]`, `/projects/[id]/invoices/new`, `/documents/[id]`, `/invoices`, `/invoices/[id]`, `/inquiries`, `/settings`
 - Portal: `/p/[token]`, `/p/[token]/doc/[docId]`, `/p/[token]/invoice/[invoiceId]`
-- Public: `/book/[slug]`
+- Public: `/book/[slug]`, `POST /api/inquiries?slug=&secret=` (external form webhook)
 
 ## When adding a feature
 1. Add columns/tables to a new migration file in `supabase/migrations/` with RLS policies.

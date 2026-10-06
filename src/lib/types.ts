@@ -3,6 +3,7 @@ export type DocumentKind = "proposal" | "contract";
 export type DocumentStatus = "draft" | "sent" | "signed" | "declined";
 export type InvoiceStatus = "draft" | "sent" | "paid" | "void";
 export type InquiryStatus = "new" | "converted" | "archived";
+export type InquirySource = "booking_form" | "website";
 
 export interface Profile {
   id: string;
@@ -89,6 +90,7 @@ export interface Inquiry {
   budget: string | null;
   message: string | null;
   status: InquiryStatus;
+  source: InquirySource;
   created_at: string;
 }
 
