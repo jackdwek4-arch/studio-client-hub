@@ -16,6 +16,7 @@ export default async function InquiriesPage() {
   ]);
   const inquiries = (data ?? []) as Inquiry[];
   const formUrl = profile?.slug ? appUrl(`/book/${profile.slug}`) : null;
+  const webhookUrl = profile?.slug ? appUrl(`/api/inquiries?slug=${profile.slug}&secret=…`) : null;
 
   return (
     <>
@@ -25,6 +26,9 @@ export default async function InquiriesPage() {
           formUrl ? (
             <>
               Your booking form: <a href={formUrl} className="text-accent underline" target="_blank">{formUrl}</a>
+              <br />
+              Website form webhook: <code className="rounded bg-paper px-1">{webhookUrl}</code> (replace … with your
+              INQUIRY_WEBHOOK_SECRET)
             </>
           ) : (
             "Set a booking-form slug in Settings to start receiving inquiries."
@@ -43,6 +47,7 @@ export default async function InquiriesPage() {
                   <div className="flex items-center gap-2">
                     <p className="font-medium">{inq.name}</p>
                     <Badge value={inq.status} />
+                    {inq.source === "website" && <Badge value="website" />}
                   </div>
                   <p className="text-sm text-ink-2">
                     {inq.email}{inq.company ? ` · ${inq.company}` : ""}{inq.budget ? ` · ${inq.budget}` : ""}
